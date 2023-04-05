@@ -1,6 +1,7 @@
-#include "source.cpp"
+#include "Processor.h"
 
 int main() {
-    runCSSProcessor();
+    Processor processor = Processor();
+    processor.run();
     return 0;
 }

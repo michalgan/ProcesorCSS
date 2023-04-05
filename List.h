@@ -1,6 +1,4 @@
-//
-// Created by Michał on 23.03.2023.
-//
+
 
 #ifndef PROCESORCSS_LIST_H
 #define PROCESORCSS_LIST_H

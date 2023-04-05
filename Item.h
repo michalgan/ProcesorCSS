@@ -7,9 +7,7 @@
 template<class T>
 class Item {
 public:
-    explicit Item(T value){
-        this->value = value;
-
+    explicit Item(T value) : value(value) {
     }
     Item * getNextItem(){
         return this->nextItem;
