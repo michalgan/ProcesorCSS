@@ -1,11 +1,9 @@
 #include <iostream>
-#include <string>
+#include "String.h"
+#define BUFFER 50
 using namespace std;
 
-bool is_number(const std::string& s)
-{
-    return( strspn( s.c_str(), "-.0123456789" ) == s.size() );
-}
+
 
 void printNumberOfSections(){
     //TODO
@@ -23,19 +21,19 @@ void printSelectorForBlock(int selectorNumber, int blockNumber){
     //TODO
 }
 
-void printAttributeValueForSection(string attribute, int section){
+void printAttributeValueForSection(String attribute, int section){
     //TODO
 }
 
-void printSummaryNumberOfOccurrencesOfAttribute(string attribute){
+void printSummaryNumberOfOccurrencesOfAttribute(String attribute){
     //TODO
 }
 
-void printSummaryNumberOfOccurrencesOfSelector(string selector){
+void printSummaryNumberOfOccurrencesOfSelector(String selector){
     //TODO
 }
 
-void printAttributeValueForSelector(string attribute, string selector){
+void printAttributeValueForSelector(String attribute, String selector){
     //TODO
 }
 
@@ -44,45 +42,45 @@ void deleteSection(int section){
 }
 
 
-void deleteAttributeFromSection(string attribute, int section){
+void deleteAttributeFromSection(String attribute, int section){
     //TODO
 }
 
 
-void callSFunction(string arg1, string arg2){
+void callSFunction(String arg1, String arg2){
     if(arg2 == "?"){
-        if(is_number(arg1)){
-            printNumberOfSelectorsForSection(stoi(arg1));
+        if(String::is_number(arg1)){
+            printNumberOfSelectorsForSection(arg1.toInt());
         }
         else{
             printSummaryNumberOfOccurrencesOfSelector(arg1);
         }
     }
     else{
-        printSelectorForBlock(stoi(arg2), stoi(arg1));
+        printSelectorForBlock(arg2.toInt(), arg1.toInt());
     }
 }
 
-void callAFunction(string arg1, string arg2){
+void callAFunction(String arg1, String arg2){
     if(arg2 == "?"){
-        if(is_number(arg1)){
-            printNumberOfAttributesForSection(stoi(arg1));
+        if(String::is_number(arg1)){
+            printNumberOfAttributesForSection(arg1.toInt());
         }
         else{
             printSummaryNumberOfOccurrencesOfAttribute(arg1);
         }
     }
     else{
-        printAttributeValueForSection(arg2, stoi(arg1));
+        printAttributeValueForSection(arg2, arg1.toInt());
     }
 }
 
-void callEFunction(string arg1, string arg2){
+void callEFunction(String arg1, String arg2){
     printAttributeValueForSelector(arg1, arg2);
 }
 
-void callDFunction(string arg1, string arg2){
-    int i = stoi(arg1);
+void callDFunction(String arg1, String arg2){
+    int i = arg1.toInt();
     if(arg2 == "*"){
         deleteSection(i);
     }
@@ -97,9 +95,10 @@ void readCSS(){
 
 void runCSSProcessor(){
     bool cssMode = true;
-    string input;
+    char * temp = new char[BUFFER];
+    String input;
     while(!feof(stdin)){
-        getline(cin, input);
+        ::scanf("%s", temp);
         if(cssMode){
             if(input == "????"){
                 cssMode = false;
@@ -116,9 +115,9 @@ void runCSSProcessor(){
             printNumberOfSections();
         }
         else{
-            int comma = input.find(",");
-            string arg1 = input.substr(0, comma);
-            string arg2 = input.substr(comma+3, input.size() - (comma+3));
+            int comma = input.find(',');
+            String arg1 = input.substr(0, comma);
+            String arg2 = input.substr(comma+3, input.size() - (comma+3));
             if(input.find(",S,") != -1){
                 callSFunction(arg1, arg2);
             }
