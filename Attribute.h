@@ -10,7 +10,10 @@
 
 class Attribute {
 public:
-    Attribute(String name, String value);
+    Attribute(const String& name, const String& value);
+    String getDescription();
+    String getName();
+    String getValue();
 private:
     String name;
     String value;

@@ -1,7 +1,7 @@
 #include "Selector.h"
 
 
-Selector::Selector(String name){
+Selector::Selector(String& name){
     this->name = name;
     this->attributes = new List<Attribute>();
 }

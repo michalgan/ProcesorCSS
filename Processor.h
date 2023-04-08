@@ -1,6 +1,7 @@
 #include <iostream>
 #include "String.h"
 #include "Selector.h"
+#include "BlockOfCSS.h"
 
 #define BUFFER 50
 using namespace std;
@@ -16,23 +17,23 @@ public:
     void printNumberOfSelectorsForSection(int section);
     void printNumberOfAttributesForSection(int section);
     void printSelectorForBlock(int selectorNumber, int blockNumber);
-    void printAttributeValueForSection(String attribute, int section);
-    void printSummaryNumberOfOccurrencesOfAttribute(String attribute);
-    void printSummaryNumberOfOccurrencesOfSelector(String selector);
-    void printAttributeValueForSelector(String attribute, String selector);
+    void printAttributeValueForSection(String& attribute, int section);
+    void printSummaryNumberOfOccurrencesOfAttribute(String& attribute);
+    void printSummaryNumberOfOccurrencesOfSelector(String& selector);
+    void printAttributeValueForSelector(String& selector, String& attribute);
     void deleteSection(int section);
-    void deleteAttributeFromSection(String attribute, int section);
-    void callSFunction(String arg1, String arg2);
-    void callAFunction(String arg1, String arg2);
-    void callEFunction(String arg1, String arg2);
-    void callDFunction(String arg1, String arg2);
+    void deleteAttributeFromSection(String& attribute, int section);
+    void callSFunction(String& arg1, String& arg2);
+    void callAFunction(String& arg1, String& arg2);
+    void callEFunction(String& arg1, String& arg2);
+    void callDFunction(String& arg1, String& arg2);
     void readCSS();
     void readSelectors();
-    void readAttributes(List<Selector*> recentlyReadSelectors);
+    void readAttributes(String sourceForAttributes, BlockOfCSS * block);
     void run();
 private:
     char * temp;
-    List<Selector*> * selectors;
+    List<BlockOfCSS*> * blocks;
 };
 
 

@@ -26,9 +26,9 @@ String::String(const String& source){
     n = 0;
     max = BUFFER;
     this->array = new char[BUFFER];
-    int i = 0;
-    while(source.array[i] != '\0')
-        this->add(source.array[i++]);
+    for (int i = 0; i < source.size(); ++i) {
+        this->add(source.get(i));
+    }
 
 }
 
@@ -36,7 +36,7 @@ int String::size() const {
     return n;
 }
 
-char String::get(int index){
+char String::get(int index) const{
     if(index >= 0 && index < n){
         return array[index];
     }
@@ -50,12 +50,6 @@ char& String::operator[](int index)
 {
     return array[index];
 }
-
-
-ostream& operator<<(ostream& os, const String& obj){
-
-}
-
 
 void String::add(char c){
     if(n < max){
@@ -90,14 +84,14 @@ int String::find(char c, int start, int stop) {
     return -1;
 }
 
-int String::find(const char array[]){
+int String::find(const char argArray[]){
     bool result;
-    size_t arraySize = strlen(array);
+    size_t arraySize = strlen(argArray);
     for (int i = 0; i < n - arraySize; ++i) {
-        if(this->array[i] == array[0]){
+        if(this->array[i] == argArray[0]){
             result = true;
             for (int j = 1; j < arraySize; ++j) {
-                if(this->array[i+j] != array[j]){
+                if(this->array[i+j] != argArray[j]){
                     result = false;
                     break;
                 }
@@ -110,10 +104,10 @@ int String::find(const char array[]){
 }
 
 
-String& String::substr(int start, int nOfChars){
-    String&& str = String();
+String* String::substr(int start, int nOfChars){
+    String * str = new String();
     for (int i = start; i < start + nOfChars; ++i) {
-        str.add(this->array[i]);
+        str->add(this->array[i]);
     }
     return str;
 }
@@ -123,7 +117,6 @@ void String::print(){
     for (int i = 0; i < n; ++i) {
         std::cout << array[i];
     }
-    std::cout << std::endl;
 }
 
 
@@ -138,13 +131,13 @@ bool String::is_number(const String &s) {
 
 
 int String::toInt(){
-    return ::atoi(this->array);
+    return atoi(this->array);
 }
 
 
 
 String& String::operator+(char c){
-    String * str = new String();
+    auto * str = new String();
     for (int i = 0; i < n; ++i) {
         str->add(array[i]);
     }
@@ -152,7 +145,7 @@ String& String::operator+(char c){
     return *str;
 }
 String& String::operator+(String arg){
-    String * str = new String();
+    auto * str = new String();
     for (int i = 0; i < n; ++i) {
         str->add(array[i]);
     }
@@ -169,27 +162,27 @@ void String::operator+=(String arg){
     }
 }
 
-void String::operator+=(const char array[]){
-    for (int i = 0; i < strlen(array); ++i) {
-        this->add(array[i]);
+void String::operator+=(const char argArray[]){
+    for (int i = 0; i < strlen(argArray); ++i) {
+        this->add(argArray[i]);
     }
 }
-String& String::operator=(const char array[]){
-    String str = String(array);
+String& String::operator=(const char argArray[]){
+    auto str = String(argArray);
     return str;
 }
 
 
-bool String::operator==(const char array[]){
-    return strcmp(this->array, array) == 0;
+bool String::operator==(const char argArray[]){
+    return strcmp(this->array, argArray) == 0;
 }
 bool String::operator==(String str){
     return strcmp(this->array, str.array) == 0;
 }
 
 
-bool String::operator!=(const char array[]){
-    return !(*this == array);
+bool String::operator!=(const char argArray[]){
+    return !(*this == argArray);
 }
 bool String::operator!=(String str){
     return !(*this == str);

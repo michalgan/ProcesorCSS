@@ -143,7 +143,15 @@ public:
             length++;
         }
     }
-    [[nodiscard]] int size() const{
+    int index(T element){
+        for (int i = 0; i < size(); ++i) {
+            if(this[i] == element){
+                return i;
+            }
+        }
+        return -1;
+    }
+    int size() const{
         return length;
     }
     void swap(int i1, int i2){
@@ -173,7 +181,7 @@ public:
 private:
     Item<T> * first;
     Item<T> * last;
-    int length;
+    int length{};
 };
 
 template<class T>

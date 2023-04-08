@@ -1,10 +1,18 @@
-//
-// Created by michal on 05.04.23.
-//
-
 #include "Attribute.h"
 
-Attribute::Attribute(String name, String value) {
+Attribute::Attribute(const String& name, const String& value) {
     this->name = name;
     this->value = value;
+}
+
+
+
+String Attribute::getDescription(){
+    return name + ": " + value + ";";
+}
+String Attribute::getName(){
+    return name;
+}
+String Attribute::getValue(){
+    return value;
 }

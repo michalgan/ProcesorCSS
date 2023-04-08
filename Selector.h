@@ -12,7 +12,7 @@
 
 class Selector {
 public:
-    Selector(String name);
+    explicit Selector(String& name);
     void addAttribute(Attribute attr);
 private:
     String name;
