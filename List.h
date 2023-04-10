@@ -151,7 +151,7 @@ public:
         }
         return -1;
     }
-    int size() const{
+    [[nodiscard]] int size() const{
         return length;
     }
     void swap(int i1, int i2){

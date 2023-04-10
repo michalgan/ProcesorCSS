@@ -104,8 +104,34 @@ int String::find(const char argArray[]){
 }
 
 
+int String::find(const String& str){
+    return find(str, 0, size());
+}
+
+int String::find(const String& str, int start){
+    return find(str, start, size());
+}
+int String::find(String str, int start, int stop){
+    bool result;
+    for (int i = start; i < stop && i < size() - str.size() + 1; ++i) {
+        if(this->array[i] == str[0]){
+            result = true;
+            for (int j = 1; j < str.size(); ++j) {
+                if(this->array[i+j] != str[j]){
+                    result = false;
+                    break;
+                }
+            }
+            if(result)
+                return i;
+        }
+    }
+    return -1;
+}
+
+
 String* String::substr(int start, int nOfChars){
-    String * str = new String();
+    auto * str = new String();
     for (int i = start; i < start + nOfChars; ++i) {
         str->add(this->array[i]);
     }
@@ -119,6 +145,19 @@ void String::print(){
     }
 }
 
+List<String> * String::split(const String& separator){
+    auto * list = new List<String>();
+    int start = 0;
+    if(find(separator, start) == 0)
+        start = separator.size();
+    while(find(separator, start) != -1){
+        list->append(*substr(start, find(separator, start) - start));
+        start = find(separator, start) + separator.size();
+    }
+    if(*substr(start, size() - start) != "")
+        list->append(*substr(start, size() - start));
+    return list;
+}
 
 bool String::is_number(const String &s) {
     for (int i = 0; i < s.size(); ++i) {
@@ -154,6 +193,16 @@ String& String::operator+(String arg){
     }
     return *str;
 }
+String& String::operator+(const char arg[]){
+    auto * str = new String();
+    for (int i = 0; i < n; ++i) {
+        str->add(array[i]);
+    }
+    for (int i = 0; i < strlen(arg); ++i) {
+        str->add(arg[i]);
+    }
+    return *str;
+}
 
 
 void String::operator+=(String arg){
@@ -176,7 +225,7 @@ String& String::operator=(const char argArray[]){
 bool String::operator==(const char argArray[]){
     return strcmp(this->array, argArray) == 0;
 }
-bool String::operator==(String str){
+bool String::operator==(const String& str){
     return strcmp(this->array, str.array) == 0;
 }
 
@@ -184,6 +233,6 @@ bool String::operator==(String str){
 bool String::operator!=(const char argArray[]){
     return !(*this == argArray);
 }
-bool String::operator!=(String str){
+bool String::operator!=(const String& str){
     return !(*this == str);
 }

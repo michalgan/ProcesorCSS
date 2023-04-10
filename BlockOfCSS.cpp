@@ -22,7 +22,7 @@ int BlockOfCSS::nOfAttributes(){
     return this->attributes.size();
 }
 
-String BlockOfCSS::getSelector(int index){
+String BlockOfCSS::getSelectorName(int index){
     return selectors.get(index);
 }
 
@@ -30,7 +30,7 @@ String BlockOfCSS::getSelector(int index){
 Attribute* BlockOfCSS::getAttribute(int index){
     return attributes.get(index);
 }
-String BlockOfCSS::getAttributeValue(String attribute){
+String BlockOfCSS::getAttributeValue(const String& attribute){
     for (int i = 0; i < attributes.size(); ++i) {
         if(attributes.get(i)->getName() == attribute){
             return attributes.get(i)->getValue();
@@ -40,7 +40,7 @@ String BlockOfCSS::getAttributeValue(String attribute){
 }
 
 
-bool BlockOfCSS::hasSelector(String selector){
+bool BlockOfCSS::hasSelector(const String& selector){
     for (int i = 0; i < selectors.size(); ++i) {
         if(selectors.get(i) == selector)
             return true;
@@ -49,7 +49,7 @@ bool BlockOfCSS::hasSelector(String selector){
 }
 
 
-void BlockOfCSS::deleteAttribute(String name){
+void BlockOfCSS::deleteAttribute(const String& name){
     for (int i = 0; i < attributes.size(); ++i) {
         if(attributes.get(i)->getName() == name){
             attributes.pop(i);

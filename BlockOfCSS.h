@@ -6,7 +6,8 @@
 #define PROCESORCSS_BLOCKOFCSS_H
 
 
-#include "Selector.h"
+#include "String.h"
+#include "Attribute.h"
 
 class BlockOfCSS {
 public:
@@ -15,11 +16,11 @@ public:
     void addAttribute(Attribute* attr);
     int nOfSelectors();
     int nOfAttributes();
-    String getSelector(int index);
+    String getSelectorName(int index);
     Attribute* getAttribute(int index);
-    String getAttributeValue(String attribute);
-    bool hasSelector(String selector);
-    void deleteAttribute(String name);
+    String getAttributeValue(const String& attribute);
+    bool hasSelector(const String& selector);
+    void deleteAttribute(const String& name);
 private:
     List<String> selectors;
     List<Attribute*> attributes;

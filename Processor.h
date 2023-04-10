@@ -1,6 +1,5 @@
 #include <iostream>
 #include "String.h"
-#include "Selector.h"
 #include "BlockOfCSS.h"
 
 #define BUFFER 50
@@ -34,6 +33,7 @@ public:
 private:
     char * temp;
     List<BlockOfCSS*> * blocks;
+    bool developerMode;
 };
 
 

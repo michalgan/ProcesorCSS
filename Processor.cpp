@@ -5,31 +5,39 @@
 Processor::Processor() {
     temp = new char[BUFFER];
     blocks = new List<BlockOfCSS*>();
+    developerMode = true;
 }
 void Processor::printNumberOfSections(){
     printf("? == %d\n", blocks->size());
 }
 
 void Processor::printNumberOfSelectorsForSection(int section){
-    printf("%d,S,? == %d\n", section, blocks->get(section-1)->nOfSelectors());
+    if(section <= blocks->size() && section > 0)
+        printf("%d,S,? == %d\n", section, blocks->get(section-1)->nOfSelectors());
 }
 
 void Processor::printNumberOfAttributesForSection(int section){
-    printf("%d,A,? == %d\n", section, blocks->get(section-1)->nOfAttributes());
+    if(section <= blocks->size() && section > 0)
+        printf("%d,A,? == %d\n", section, blocks->get(section-1)->nOfAttributes());
 }
 
 void Processor::printSelectorForBlock(int selectorNumber, int blockNumber){
-    printf("%d,S,%d == ", blockNumber, selectorNumber);
-    blocks->get(blockNumber-1)->getSelector(selectorNumber-1).print();
-    printf("\n");
+    if(blockNumber <= blocks->size() && blockNumber > 0 && selectorNumber <= blocks->get(blockNumber-1)->nOfSelectors() && selectorNumber > 0){
+        printf("%d,S,%d == ", blockNumber, selectorNumber);
+        blocks->get(blockNumber-1)->getSelectorName(selectorNumber-1).print();
+        printf("\n");
+    }
 }
 
 void Processor::printAttributeValueForSection(String& attribute, int section){
-    printf("%d,A,", section);
-    attribute.print();
-    printf(" == ");
-    blocks->get(section - 1)->getAttributeValue(attribute).print();
-    printf("\n");
+    String value = blocks->get(section - 1)->getAttributeValue(attribute);
+    if(value != ""){
+        printf("%d,A,", section);
+        attribute.print();
+        printf(" == ");
+        value.print();
+        printf("\n");
+    }
 }
 
 void Processor::printSummaryNumberOfOccurrencesOfAttribute(String& attribute){
@@ -139,60 +147,34 @@ void Processor::readCSS(){
 
 void Processor::readSelectors(){
     auto * block = new BlockOfCSS();
-    List<Selector*> recentlyReadSelectors = List<Selector*>();
-    auto name = String(temp);
-    if (name.find(',') == name.size() - 1) {
-        name = *name.substr(0, name.size() - 1);
-    }
-    block->addSelector(name);
-    String sourceForAttributes = "";
-    while(!feof(stdin)) {
+    auto stream = String(temp);
+    while(stream.find('{') == -1){
         scanf("%s", temp);
-        name = String(temp);
-        if (name.find('{') == -1) {
-            if (name.find(',') == name.size() - 1) {
-                name = *name.substr(0, name.size() - 1);
-            }
-            block->addSelector(name);
-        }
-        else {
-            int index = name.find('{');
-            if(index != name.size() - 1){
-                sourceForAttributes = *name.substr(index+1, name.size() - index);
-            }
-            break;
-        }
+        stream += String(temp);
     }
+    int sepIndex = stream.find('{');
+    List<String> * selectors = stream.substr(0, sepIndex)->split(String(","));
+    for (int i = 0; i < selectors->size(); ++i) {
+        block->addSelector(selectors->get(i));
+    }
+    String sourceForAttributes = String("");
+    if(stream.find('{') != stream.size() - 1)
+        sourceForAttributes = *stream.substr(sepIndex+1, stream.size() - sepIndex-1);
     readAttributes(sourceForAttributes, block);
     blocks->append(block);
 
 }
 
-void Processor::readAttributes(String sourceForAttributes, BlockOfCSS * block){
-    while(!feof(stdin)) {
-        String name;
-        if(sourceForAttributes == ""){
-            scanf("%s", temp);
-            name = String(temp);
-        }
-        else{
-            name = sourceForAttributes;
-        }
-        if (name.find('}') == -1) {
-            scanf("%s", temp);
-            auto value = String(temp);
-            while(value.find(';') == -1 && !feof(stdin)){
-                scanf("%s", temp);
-                value += String(temp);
-            }
-            name = *name.substr(0, name.size() - 1);
-            value = *value.substr(0, value.size() - 1);
-            auto * attr = new Attribute(name, value);
-            block->addAttribute(attr);
-        }
-        else {
-            break;
-        }
+void Processor::readAttributes(String stream, BlockOfCSS * block){
+    while(stream.find('}') == -1){
+        scanf("%s", temp);
+        stream += String(temp);
+    }
+    int sepIndex = stream.find('}');
+    List<String> * attributes = stream.substr(0, sepIndex)->split(String(";"));
+    for (int i = 0; i < attributes->size(); ++i) {
+        List<String> * attribute = attributes->get(i).split(String(":"));
+        block->addAttribute(new Attribute(attribute->get(0), attribute->get(1)));
     }
 }
 
@@ -207,7 +189,7 @@ void Processor::run(){
             printNumberOfSections();
         }
         else{
-            String input = temp;
+            String input = String(temp);
             int comma = input.find(',');
             String arg1 = *input.substr(0, comma);
             String arg2 = *input.substr(comma+3, input.size() - (comma+3));

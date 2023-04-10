@@ -10,9 +10,9 @@ Attribute::Attribute(const String& name, const String& value) {
 String Attribute::getDescription(){
     return name + ": " + value + ";";
 }
-String Attribute::getName(){
+String Attribute::getName() const{
     return name;
 }
-String Attribute::getValue(){
+String Attribute::getValue() const{
     return value;
 }
