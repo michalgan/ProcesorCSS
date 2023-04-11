@@ -177,27 +177,12 @@ public:
             return true;
         }
     }
-    friend ostream& operator<<(ostream& os, const List<T>& list);
 private:
     Item<T> * first;
     Item<T> * last;
     int length{};
 };
 
-template<class T>
-ostream &operator<<(ostream& os, const List<T> & list)
-{
-    os<<'[';
-    if(list.size() > 0){
-        os<<list.get(0);
 
-    }
-    for (int i = 1; i < list.size(); ++i) {
-        os<<", "<<list.get(i);
-
-    }
-    os<<']';
-    return os;
-}
 
 #endif //PROCESORCSS_LIST_H

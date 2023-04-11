@@ -30,13 +30,15 @@ void Processor::printSelectorForBlock(int selectorNumber, int blockNumber){
 }
 
 void Processor::printAttributeValueForSection(String& attribute, int section){
-    String value = blocks->get(section - 1)->getAttributeValue(attribute);
-    if(value != ""){
-        printf("%d,A,", section);
-        attribute.print();
-        printf(" == ");
-        value.print();
-        printf("\n");
+    if(section > 0 && section <= blocks->size()){
+        String value = blocks->get(section - 1)->getAttributeValue(attribute);
+        if(value != ""){
+            printf("%d,A,", section);
+            attribute.print();
+            printf(" == ");
+            value.print();
+            printf("\n");
+        }
     }
 }
 
@@ -61,12 +63,12 @@ void Processor::printSummaryNumberOfOccurrencesOfSelector(String& selector){
 }
 
 void Processor::printAttributeValueForSelector(String& selector, String& attribute){
-    selector.print();
-    printf(",E,");
-    attribute.print();
-    printf(" == ");
     for (int i = blocks->size() - 1; i >= 0; --i) {
         if(blocks->get(i)->hasSelector(selector) && blocks->get(i)->getAttributeValue(attribute) != "" ){
+            selector.print();
+            printf(",E,");
+            attribute.print();
+            printf(" == ");
             blocks->get(i)->getAttributeValue(attribute).print();
             break;
         }
@@ -75,18 +77,22 @@ void Processor::printAttributeValueForSelector(String& selector, String& attribu
 }
 
 void Processor::deleteSection(int section){
-    printf("%d,D,* == deleted\n", section);
-    blocks->pop(section-1);
+    if(section > 0 && section <= blocks->size()){
+        printf("%d,D,* == deleted\n", section);
+        blocks->pop(section-1);
+    }
 }
 
 
 void Processor::deleteAttributeFromSection(String& attribute, int section){
-    blocks->get(section - 1)->deleteAttribute(attribute);
-    if(blocks->get(section - 1)->nOfAttributes() == 0)
-        blocks->pop(section - 1);
-    printf("%d,D, ", section);
-    attribute.print();
-    printf(" == deleted\n");
+    if(section > 0 && section <= blocks->size()){
+        blocks->get(section - 1)->deleteAttribute(attribute);
+        if(blocks->get(section - 1)->nOfAttributes() == 0)
+            blocks->pop(section - 1);
+        printf("%d,D,", section);
+        attribute.print();
+        printf(" == deleted\n");
+    }
 }
 
 
@@ -134,7 +140,7 @@ void Processor::callDFunction(String& arg1, String& arg2){
 
 void Processor::readCSS(){
     while(!feof(stdin)) {
-        scanf("%s", temp);
+        scanf("%50s", temp);
         if(strcmp(temp, "????") == 0){
             break;
         }
@@ -148,8 +154,8 @@ void Processor::readCSS(){
 void Processor::readSelectors(){
     auto * block = new BlockOfCSS();
     auto stream = String(temp);
-    while(stream.find('{') == -1){
-        scanf("%s", temp);
+    if(stream.find('{') == -1){
+        scanf("%400s{", temp);
         stream += String(temp);
     }
     int sepIndex = stream.find('{');
@@ -166,22 +172,29 @@ void Processor::readSelectors(){
 }
 
 void Processor::readAttributes(String stream, BlockOfCSS * block){
-    while(stream.find('}') == -1){
-        scanf("%s", temp);
+    if(stream.find('}') == -1){
+        scanf("%400}s", temp);
         stream += String(temp);
     }
     int sepIndex = stream.find('}');
-    List<String> * attributes = stream.substr(0, sepIndex)->split(String(";"));
+    List<String> * attributes = (stream.substr(0, sepIndex))->split(String(";"));
     for (int i = 0; i < attributes->size(); ++i) {
         List<String> * attribute = attributes->get(i).split(String(":"));
-        block->addAttribute(new Attribute(attribute->get(0), attribute->get(1)));
+        if(attribute->size() > 1)
+            block->addAttribute(new Attribute(attribute->get(0), attribute->get(1)));
+        else{
+            printf("Problem with reading attribute...\n");
+            printf("Potential attribute:\n\t");
+            attributes->get(i).print();
+            printf("\n");
+        }
     }
 }
 
 void Processor::run(){
     readCSS();
     while(!feof(stdin)){
-        scanf("%s", temp);
+        scanf("%50s", temp);
         if(strcmp(temp, "****") == 0){
             readCSS();
         }
@@ -207,4 +220,9 @@ void Processor::run(){
             }
         }
     }
+}
+
+Processor::~Processor(){
+    delete temp;
+    delete blocks;
 }

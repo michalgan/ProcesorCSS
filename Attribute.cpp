@@ -5,11 +5,6 @@ Attribute::Attribute(const String& name, const String& value) {
     this->value = value;
 }
 
-
-
-String Attribute::getDescription(){
-    return name + ": " + value + ";";
-}
 String Attribute::getName() const{
     return name;
 }

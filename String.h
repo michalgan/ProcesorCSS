@@ -21,8 +21,10 @@ public:
     int find(const String& str, int start);
     int find(String str, int start, int stop);
     String* substr(int start, int nOfChars);
-    void print();
+    void print() const;
     List<String> * split(const String& separator);
+    bool equal(const char argArray[]) const;
+    bool equal(const String& str) const;
     char& operator[](int index);
     String& operator+(char c);
     String& operator+(String arg);
@@ -30,12 +32,14 @@ public:
     void operator+=(String arg);
     void operator+=(const char argArray[]);
     String& operator=(const char argArray[]);
-    bool operator==(const char argArray[]);
-    bool operator==(const String& str);
-    bool operator!=(const char argArray[]);
-    bool operator!=(const String& str);
+    String& operator=(const String& str);
+    bool operator==(const char argArray[]) const;
+    bool operator==(const String& str) const;
+    bool operator!=(const char argArray[]) const;
+    bool operator!=(const String& str) const;
     static bool is_number(const String& s);
     int toInt();
+    ~String();
 private:
     int n;
     int max;

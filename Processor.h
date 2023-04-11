@@ -30,6 +30,7 @@ public:
     void readSelectors();
     void readAttributes(String sourceForAttributes, BlockOfCSS * block);
     void run();
+    ~Processor();
 private:
     char * temp;
     List<BlockOfCSS*> * blocks;

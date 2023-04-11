@@ -139,7 +139,7 @@ String* String::substr(int start, int nOfChars){
 }
 
 
-void String::print(){
+void String::print() const{
     for (int i = 0; i < n; ++i) {
         std::cout << array[i];
     }
@@ -158,6 +158,31 @@ List<String> * String::split(const String& separator){
         list->append(*substr(start, size() - start));
     return list;
 }
+
+
+bool String::equal(const char argArray[]) const{
+    if(n != ::strlen(argArray))
+        return false;
+    else{
+        for (int i = 0; i < n; ++i) {
+            if(array[i] != argArray[i])
+                return false;
+        }
+        return true;
+    }
+}
+bool String::equal(const String& str) const{
+    if(n != str.size())
+        return false;
+    else{
+        for (int i = 0; i < n; ++i) {
+            if(array[i] != str.get(i))
+                return false;
+        }
+        return true;
+    }
+}
+
 
 bool String::is_number(const String &s) {
     for (int i = 0; i < s.size(); ++i) {
@@ -217,22 +242,38 @@ void String::operator+=(const char argArray[]){
     }
 }
 String& String::operator=(const char argArray[]){
-    auto str = String(argArray);
-    return str;
+    n = strlen(argArray);
+    array = new char[n];
+    for (int i = 0; i < n; ++i) {
+        array[i] = argArray[i];
+    }
+    return *this;
+}
+String& String::operator=(const String& str){
+    array = new char[str.size()];
+    n = str.size();
+    for (int i = 0; i < n; ++i) {
+        array[i] = str.get(i);
+    }
+    return *this;
 }
 
 
-bool String::operator==(const char argArray[]){
-    return strcmp(this->array, argArray) == 0;
+bool String::operator==(const char argArray[]) const{
+    return equal(argArray);
 }
-bool String::operator==(const String& str){
-    return strcmp(this->array, str.array) == 0;
+bool String::operator==(const String& str) const{
+    return equal(str);
 }
 
 
-bool String::operator!=(const char argArray[]){
-    return !(*this == argArray);
+bool String::operator!=(const char argArray[]) const{
+    return !equal(argArray);
 }
-bool String::operator!=(const String& str){
-    return !(*this == str);
+bool String::operator!=(const String& str) const{
+    return !equal(str);
+}
+
+String::~String() {
+    delete array;
 }
