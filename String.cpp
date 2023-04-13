@@ -129,6 +129,13 @@ int String::find(String str, int start, int stop){
     return -1;
 }
 
+int String::findLast(char c) const{
+    for (int i = n-1; i >=0; i--){
+        if(array[i] == c)
+            return i;
+    }
+    return -1;
+}
 
 String* String::substr(int start, int nOfChars){
     auto * str = new String();
@@ -160,8 +167,18 @@ List<String> * String::split(const String& separator){
 }
 
 
+String* String::withoutWhiteSpaces(){
+    String * str = new String();
+    for (int i = 0; i < n; ++i) {
+        if(array[i] != '\t' && array[i] != '\n' && array[i] != ' ')
+            str->add(array[i]);
+    }
+    return str;
+}
+
+
 bool String::equal(const char argArray[]) const{
-    if(n != ::strlen(argArray))
+    if(n != strlen(argArray))
         return false;
     else{
         for (int i = 0; i < n; ++i) {

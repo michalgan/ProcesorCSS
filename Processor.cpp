@@ -5,7 +5,7 @@
 Processor::Processor() {
     temp = new char[BUFFER];
     blocks = new List<BlockOfCSS*>();
-    developerMode = true;
+    developerMode = false;
 }
 void Processor::printNumberOfSections(){
     printf("? == %d\n", blocks->size());
@@ -22,7 +22,8 @@ void Processor::printNumberOfAttributesForSection(int section){
 }
 
 void Processor::printSelectorForBlock(int selectorNumber, int blockNumber){
-    if(blockNumber <= blocks->size() && blockNumber > 0 && selectorNumber <= blocks->get(blockNumber-1)->nOfSelectors() && selectorNumber > 0){
+    if(blockNumber <= blocks->size() && blockNumber > 0
+    && selectorNumber <= blocks->get(blockNumber-1)->nOfSelectors() && selectorNumber > 0){
         printf("%d,S,%d == ", blockNumber, selectorNumber);
         blocks->get(blockNumber-1)->getSelectorName(selectorNumber-1).print();
         printf("\n");
@@ -85,7 +86,7 @@ void Processor::deleteSection(int section){
 
 
 void Processor::deleteAttributeFromSection(String& attribute, int section){
-    if(section > 0 && section <= blocks->size()){
+    if(section > 0 && section <= blocks->size() && blocks->get(section - 1)->hasAttribute(attribute)){
         blocks->get(section - 1)->deleteAttribute(attribute);
         if(blocks->get(section - 1)->nOfAttributes() == 0)
             blocks->pop(section - 1);
@@ -154,9 +155,13 @@ void Processor::readCSS(){
 void Processor::readSelectors(){
     auto * block = new BlockOfCSS();
     auto stream = String(temp);
-    if(stream.find('{') == -1){
-        scanf("%400s{", temp);
-        stream += String(temp);
+    while(stream.find('{') == -1){
+        scanf("%50s", temp);
+        String str = String(temp);
+        if(str.get(str.size()-1) != ','){
+            stream += " ";
+        }
+        stream += str;
     }
     int sepIndex = stream.find('{');
     List<String> * selectors = stream.substr(0, sepIndex)->split(String(","));
@@ -172,8 +177,10 @@ void Processor::readSelectors(){
 }
 
 void Processor::readAttributes(String stream, BlockOfCSS * block){
-    if(stream.find('}') == -1){
-        scanf("%400}s", temp);
+    while(stream.find('}') == -1){
+        scanf("%50s", temp);
+        if(stream.findLast(':') > stream.findLast(';'))
+            stream += " ";
         stream += String(temp);
     }
     int sepIndex = stream.find('}');
@@ -183,10 +190,12 @@ void Processor::readAttributes(String stream, BlockOfCSS * block){
         if(attribute->size() > 1)
             block->addAttribute(new Attribute(attribute->get(0), attribute->get(1)));
         else{
-            printf("Problem with reading attribute...\n");
-            printf("Potential attribute:\n\t");
-            attributes->get(i).print();
-            printf("\n");
+            if(developerMode){
+                printf("Problem with reading attribute...\n");
+                printf("Potential attribute:\n\t");
+                attributes->get(i).print();
+                printf("\n");
+            }
         }
     }
 }
@@ -194,7 +203,12 @@ void Processor::readAttributes(String stream, BlockOfCSS * block){
 void Processor::run(){
     readCSS();
     while(!feof(stdin)){
-        scanf("%50s", temp);
+        scanf("%50s\n", temp);
+        if(developerMode){
+            printf("\"");
+            String(temp).print();
+            printf("\"\n");
+        }
         if(strcmp(temp, "****") == 0){
             readCSS();
         }
@@ -223,6 +237,6 @@ void Processor::run(){
 }
 
 Processor::~Processor(){
-    delete temp;
     delete blocks;
+    delete temp;
 }

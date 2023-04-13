@@ -11,8 +11,10 @@
 class Attribute {
 public:
     Attribute(const String& name, const String& value);
+    String getDescription();
     String getName() const;
     String getValue() const;
+    ~Attribute();
 private:
     String name;
     String value;

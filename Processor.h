@@ -28,7 +28,7 @@ public:
     void callDFunction(String& arg1, String& arg2);
     void readCSS();
     void readSelectors();
-    void readAttributes(String sourceForAttributes, BlockOfCSS * block);
+    void readAttributes(String stream, BlockOfCSS * block);
     void run();
     ~Processor();
 private:

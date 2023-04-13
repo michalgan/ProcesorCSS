@@ -47,11 +47,12 @@ public:
 
         }
         else{
-            Item<T> Item = *last;
+            Item<T> item = *last;
             last = last->getPreviousItem();
             delete last->getNextItem();
+            last->setNextItem(nullptr);
             length--;
-            return Item;
+            return item;
         }
     }
     Item<T> pop(int index){
@@ -71,6 +72,7 @@ public:
             Item<T> Item = *first;
             first = first->getNextItem();
             delete first->getPreviousItem();
+            first->setPreviousItem(nullptr);
             length--;
             return Item;
 
@@ -87,7 +89,6 @@ public:
             Item<T> * next = item.getNextItem();
             previous->setNextItem(next);
             next->setPreviousItem(previous);
-            delete getItem(index);
             length--;
             return item;
         }
@@ -96,7 +97,6 @@ public:
     Item<T> * getItem(int index){
         if(length == 0){
             throw std::runtime_error("List is empty!");
-
         }
         else{
             Item<T> * currentItem = first;
@@ -143,7 +143,7 @@ public:
             length++;
         }
     }
-    int index(T element){
+    int index(const T& element) const{
         for (int i = 0; i < size(); ++i) {
             if(this[i] == element){
                 return i;
@@ -151,7 +151,7 @@ public:
         }
         return -1;
     }
-    [[nodiscard]] int size() const{
+    int size() const{
         return length;
     }
     void swap(int i1, int i2){

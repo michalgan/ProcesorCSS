@@ -7,7 +7,7 @@
 template<class T>
 class Item {
 public:
-    explicit Item(T value) : value(value) {
+    explicit Item(const T& value) : value(value) {
     }
     Item * getNextItem(){
         return this->nextItem;
@@ -29,7 +29,7 @@ public:
         return value;
 
     }
-    void setValue(T newValue){
+    void setValue(const T& newValue){
         this->value = newValue;
 
     }

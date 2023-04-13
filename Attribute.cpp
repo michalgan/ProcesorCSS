@@ -1,10 +1,10 @@
 #include "Attribute.h"
 
-Attribute::Attribute(const String& name, const String& value) {
-    this->name = name;
-    this->value = value;
-}
+Attribute::Attribute(const String& name, const String& value) :name(name), value(value){}
 
+String Attribute::getDescription(){
+    return name + ": " + value + ";";
+}
 String Attribute::getName() const{
     return name;
 }

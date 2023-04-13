@@ -1,9 +1,6 @@
 #include "BlockOfCSS.h"
 
-BlockOfCSS::BlockOfCSS() {
-    selectors = List<String>();
-    attributes = List<Attribute*>();
-}
+BlockOfCSS::BlockOfCSS() :selectors(List<String>()), attributes(List<Attribute*>()) {}
 
 void BlockOfCSS::addSelector(const String& name){
     selectors.append(name);
@@ -15,10 +12,10 @@ void BlockOfCSS::addAttribute(Attribute* attr){
 }
 
 
-int BlockOfCSS::nOfSelectors(){
+int BlockOfCSS::nOfSelectors() const{
     return this->selectors.size();
 }
-int BlockOfCSS::nOfAttributes(){
+int BlockOfCSS::nOfAttributes() const{
     return this->attributes.size();
 }
 
@@ -43,6 +40,15 @@ String BlockOfCSS::getAttributeValue(const String& attribute){
 bool BlockOfCSS::hasSelector(const String& selector){
     for (int i = 0; i < selectors.size(); ++i) {
         if(selectors.get(i) == selector)
+            return true;
+    }
+    return false;
+}
+
+
+bool BlockOfCSS::hasAttribute(const String& attribute){
+    for (int i = 0; i < attributes.size(); ++i) {
+        if(attributes.get(i)->getName() == attribute)
             return true;
     }
     return false;

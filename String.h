@@ -20,9 +20,11 @@ public:
     int find(const String& str);
     int find(const String& str, int start);
     int find(String str, int start, int stop);
+    int findLast(char c) const;
     String* substr(int start, int nOfChars);
     void print() const;
     List<String> * split(const String& separator);
+    String* withoutWhiteSpaces();
     bool equal(const char argArray[]) const;
     bool equal(const String& str) const;
     char& operator[](int index);

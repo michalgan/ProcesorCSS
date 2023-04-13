@@ -14,12 +14,13 @@ public:
     BlockOfCSS();
     void addSelector(const String& name);
     void addAttribute(Attribute* attr);
-    int nOfSelectors();
-    int nOfAttributes();
+    int nOfSelectors() const;
+    int nOfAttributes() const;
     String getSelectorName(int index);
     Attribute* getAttribute(int index);
     String getAttributeValue(const String& attribute);
     bool hasSelector(const String& selector);
+    bool hasAttribute(const String& attribute);
     void deleteAttribute(const String& name);
 private:
     List<String> selectors;
