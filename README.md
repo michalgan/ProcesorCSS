@@ -1,6 +1,6 @@
 Procesor CSS
 
-Celem zadania jest napisanie prostego silnika przetwarzającego CSS-y. W ramach zadania należy wczytać ze standardowego wejścia sekcje CSS przeplatane sekcjami komend. Sekcje CSS należy sparsować i umieścić w odpowiednich strukturach, sekcje komend należy sparsować i wykonać wypisując na standardowe wyjście ew. rezultaty (po ==).
+Prosty silnik przetwarzający CSS. Program wczytuje ze standardowego wejścia sekcje CSS przeplatane sekcjami komend. Sekcje CSS są parsowane i umieszane w odpowiednich strukturach, sekcje komend są parsowane i wykonywane wypisując na standardowe wyjście.
 
 CSS
 
@@ -29,8 +29,3 @@ W poniższych komendach i oraz j to dodatnie liczby całkowite (mieszczą się w
     i,D,* - usuń cały blok nr i (tj. separatory+atrybuty), po poprawnym wykonaniu wypisz deleted;
     i,D,n – usuń z i-tego bloku atrybut o nazwie n, jeśli w wyniku operacji pozostaje pusty blok powinien zostać również usunięty (wraz z ew. selektorami), po poprawnym wykonaniu wypisz deleted.
 
-Uwagi implementacyjne
-
-Selektory oraz atrybuty powinny być przechowywane jako listy. Poszczególne bloki CSS powinny być zorganizowane jako lista dwustronna (aby efektywnie realizować komendę E – ostatnie wystąpienie atrybutu). Aby lepiej wykorzystać pamięć lista powinna obejmować tablicę T=8 struktur reprezentujących blok (gdzie T jest stałą możliwą do zmiany w czasie kompilacji) oraz licznik zajętych aktualnie struktur (z uwagi na ew. kasowanie elementów). Liczniki warto wykorzystać dla przyśpieszenia operacji parametryzowanych numerem komórki tj. i.
-
-Przy alokowaniu nowego węzła tworzona jest tablica T elementowa. Przy dodawaniu elementów, o ile jest wolne miejsce w węźle listy, należy je wykorzystać zanim alokowane zostaną nowe węzły. Jeżeli w przypadku usuwania elementów pozostanie pusta tablica należy węzeł usunąć. Nie trzeba przesuwać elementów miedzy węzłami, łączyć węzłów itd.
